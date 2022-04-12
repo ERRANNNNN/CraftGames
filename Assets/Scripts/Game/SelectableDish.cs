@@ -10,8 +10,7 @@ public class SelectableDish : Dish, IPointerClickHandler
 
     public static Action<DishData> OnSelectDish;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         Init(data);
     }

@@ -13,8 +13,8 @@ public class VisitorsSpawner : MonoBehaviour
     [SerializeField] private int maxDishesPerVisitor = 3;
     [SerializeField] private int minDishesPerVisitor = 1;
 
-    public static System.Random rand = new System.Random();
     private List<Visitor> visitors = new List<Visitor>();
+    private VisitorsDishAccepter visitorsDishAccepter;
     private int servicedVisitors = 0;
     private int spawnedVisitors = 0;
     private int currentDishesCount = 0;
@@ -23,6 +23,7 @@ public class VisitorsSpawner : MonoBehaviour
     private void Start()
     {
         Visitor.onExit += DeleteVisitorFromQueue;
+        visitorsDishAccepter = new VisitorsDishAccepter(visitors);
         SpawnVisitors();
     }
 
@@ -73,25 +74,13 @@ public class VisitorsSpawner : MonoBehaviour
     {
         Visitor visitor = Instantiate(visitorRect, canvas).GetComponent<Visitor>();
         visitor.transform.SetAsFirstSibling();
-        int randCount = rand.Next(minDishesPerVisitor, maxDishesPerVisitor + 1);
-        float remainingDishesCount = (maxDishesNumber - (currentDishesCount + randCount));
-        float remainingVisitorsCount = (maxVisitorsNumber - (spawnedVisitors + 1));
-        while (
-            (remainingDishesCount > (remainingVisitorsCount * maxDishesPerVisitor))
-            || ((remainingDishesCount / remainingVisitorsCount) < 1)
-        )
-        {
-            remainingDishesCount = (maxDishesNumber - (currentDishesCount + randCount));
-            remainingVisitorsCount = (maxVisitorsNumber - (spawnedVisitors + 1));
-            if (remainingDishesCount > (remainingVisitorsCount * maxDishesPerVisitor))
-            {
-                randCount++;
-            }
-            else if ((remainingDishesCount / remainingVisitorsCount) < 1)
-            {
-                randCount--;
-            }
-        }
+
+        RandomNumberGenerator.PartitionsParameters partitionsParameters = new RandomNumberGenerator.PartitionsParameters();
+        partitionsParameters.InitPartitions(spawnedVisitors, maxVisitorsNumber);
+        partitionsParameters.InitValues(currentDishesCount, maxDishesNumber);
+        partitionsParameters.InitPartitionsValuesLimits(minDishesPerVisitor, maxDishesPerVisitor);
+
+        int randCount = RandomNumberGenerator.GenerateForPartitions(partitionsParameters);
         currentDishesCount += randCount;
         spawnedVisitors++;
         visitor.Init(randCount);

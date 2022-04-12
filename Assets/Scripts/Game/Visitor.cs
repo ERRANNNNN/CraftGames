@@ -1,18 +1,19 @@
 ﻿using System.Collections;
 using System;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using System.Linq;
 using System.Collections.Generic;
 
-public class Visitor : MonoBehaviour, IPointerClickHandler
+public class Visitor : MonoBehaviour
 {
     [SerializeField] private RectTransform rect;
     [SerializeField] private float duration = 1f;
     [SerializeField] private List<DishData> availableDishes = new List<DishData>();
     [SerializeField] private Transform dishTransform;
     [SerializeField] private Transform visitorDishesPanelTransform;
-    private List<DishData> visitorDishes = new List<DishData>();
-    
+
+    private Dictionary<GameObject, DishData> visitorDishes = new Dictionary<GameObject, DishData>();
+    public Dictionary<GameObject, DishData> VisitorDishes { get { return visitorDishes; } }
 
     private Vector3 exitPosition = new Vector2(2078.5f, 540.0f);
 
@@ -22,10 +23,10 @@ public class Visitor : MonoBehaviour, IPointerClickHandler
     {
         for (int i = 0; i < dishesCount; i++)
         {
-            int availableDishesRandomIndex = VisitorsSpawner.rand.Next(availableDishes.Count);
+            int availableDishesRandomIndex = RandomNumberGenerator.Generate(availableDishes.Count);
             DishData randomDishData = availableDishes[availableDishesRandomIndex];
-            visitorDishes.Add(randomDishData);
             Dish dish = Instantiate(dishTransform, visitorDishesPanelTransform).GetComponent<Dish>();
+            visitorDishes.Add(dish.gameObject, randomDishData);
             dish.Init(randomDishData);
         }
     }
@@ -48,9 +49,15 @@ public class Visitor : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    public void AcceptDish(DishData data)
     {
-        onExit?.Invoke(this);
-        StartCoroutine(MoveToPosition(exitPosition, true));
+        GameObject dishObject = visitorDishes.Where(x => x.Value == data).First().Key;
+        visitorDishes.Remove(dishObject);
+        Destroy(dishObject);
+        if (visitorDishes.Count == 0)
+        {
+            onExit?.Invoke(this);
+            StartCoroutine(MoveToPosition(exitPosition, true));
+        }
     }
 }
