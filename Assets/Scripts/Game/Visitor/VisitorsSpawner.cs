@@ -22,7 +22,6 @@ public class VisitorsSpawner : MonoBehaviour
         spawnedVisitors = 0;
         currentDishesCount = 0;
         levelSettings = _levelSettings;
-        Debug.Log(levelSettings.GetVisitorsSettings.visitorsCount);
         visitorsDishAccepter = new VisitorsDishAccepter(visitors);
         Visitor.OnExit += DeleteVisitorFromQueue;
         SpawnVisitors();
