@@ -15,7 +15,7 @@ public class Visitor : MonoBehaviour
     private Dictionary<GameObject, DishData> visitorDishes = new Dictionary<GameObject, DishData>();
     public Dictionary<GameObject, DishData> VisitorDishes { get { return visitorDishes; } }
 
-    private Vector3 exitPosition = new Vector2(2078.5f, 540.0f);
+    private Vector3 exitPosition = new Vector2(2078.5f, 299.2f);
 
     public static Action<Visitor> OnExit;
     public static Action<Visitor> OnVisitorServed;
