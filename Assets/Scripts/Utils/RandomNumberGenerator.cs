@@ -1,7 +1,9 @@
 ﻿using System;
+using UnityEngine;
+
 public class RandomNumberGenerator
 {
-    private static Random random = new Random();
+    private static System.Random random = new System.Random();
 
     public struct PartitionsParameters
     {
@@ -53,19 +55,22 @@ public class RandomNumberGenerator
         {
             remainingValuesCount = (parameters.maxValues - (parameters.currentValues + number));
             remainingPartitionsCount = (parameters.maxPartitions - (parameters.currentPartitions + 1));
+            Debug.Log("Values: " + remainingValuesCount);
+            Debug.Log("Partitions: " + remainingPartitionsCount);
             if (remainingValuesCount > (remainingPartitionsCount * parameters.maxValueInPartition))
             {
                 number++;
             }
             else if ((remainingValuesCount / remainingPartitionsCount) < 1)
             {
-                number--;
+                number--;   
             }
+            
         } while (
             (remainingValuesCount > (remainingPartitionsCount * parameters.maxValueInPartition))
-            || ((remainingPartitionsCount / remainingPartitionsCount) < 1)
+            || ((remainingValuesCount / remainingPartitionsCount) < 1)
         );
-
+        Debug.Log("Number: " + number);
         return number;
     }
 }
