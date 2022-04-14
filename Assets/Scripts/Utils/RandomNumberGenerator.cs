@@ -1,7 +1,4 @@
-﻿using System;
-using UnityEngine;
-
-public class RandomNumberGenerator
+﻿public class RandomNumberGenerator
 {
     private static System.Random random = new System.Random();
 
@@ -55,8 +52,6 @@ public class RandomNumberGenerator
         {
             remainingValuesCount = (parameters.maxValues - (parameters.currentValues + number));
             remainingPartitionsCount = (parameters.maxPartitions - (parameters.currentPartitions + 1));
-            Debug.Log("Values: " + remainingValuesCount);
-            Debug.Log("Partitions: " + remainingPartitionsCount);
             if (remainingValuesCount > (remainingPartitionsCount * parameters.maxValueInPartition))
             {
                 number++;
@@ -65,12 +60,10 @@ public class RandomNumberGenerator
             {
                 number--;   
             }
-            
         } while (
             (remainingValuesCount > (remainingPartitionsCount * parameters.maxValueInPartition))
             || ((remainingValuesCount / remainingPartitionsCount) < 1)
         );
-        Debug.Log("Number: " + number);
         return number;
     }
 }
