@@ -22,11 +22,6 @@ public class VisitorsDishAccepter
 
     private Visitor FindVisitorHasDish(DishData data)
     {
-        Visitor[] visitorsHasDish = visitors.Where(visitor => visitor.VisitorDishes.ContainsValue(data)).ToArray();
-        if (visitorsHasDish.Length != 0)
-        {
-            return visitorsHasDish[RandomNumberGenerator.Generate(visitorsHasDish.Length)];
-        }
-        return null;
+        return visitors.Where(visitor => visitor.VisitorDishes.ContainsValue(data)).FirstOrDefault();
     }
 }

@@ -7,29 +7,35 @@ public class VisitorsSpawner : MonoBehaviour
     [SerializeField] private List<Transform> slots = new List<Transform>();
     [SerializeField] private Transform visitorRect;
     [SerializeField] private Transform canvas;
-    [SerializeField] private float movingToPositionDelay = 1;
-    [SerializeField] private int maxVisitorsNumber = 6;
-    [SerializeField] private int maxDishesNumber = 14;
-    [SerializeField] private int maxDishesPerVisitor = 3;
-    [SerializeField] private int minDishesPerVisitor = 1;
+    [SerializeField] private float movingToPositionDelay = 0.5f;
 
-    private List<Visitor> visitors = new List<Visitor>();
+    private List<Visitor> visitors;
     private VisitorsDishAccepter visitorsDishAccepter;
-    private int servicedVisitors = 0;
+    private Vector2 startVisitorPosition = new Vector2(-207.8f, 594.0f);
+    private LevelSettings levelSettings;
     private int spawnedVisitors = 0;
     private int currentDishesCount = 0;
-    private Vector2 startVisitorPosition = new Vector2(-207.8f, 594.0f);
 
-    private void Start()
+    public void Init(LevelSettings _levelSettings)
     {
-        Visitor.onExit += DeleteVisitorFromQueue;
+        ClearQueue();
+        spawnedVisitors = 0;
+        currentDishesCount = 0;
+        levelSettings = _levelSettings;
+        Debug.Log(levelSettings.GetVisitorsSettings.visitorsCount);
         visitorsDishAccepter = new VisitorsDishAccepter(visitors);
+        Visitor.OnExit += DeleteVisitorFromQueue;
         SpawnVisitors();
+    }
+
+    private void OnDestroy()
+    {
+        Visitor.OnExit -= DeleteVisitorFromQueue;
     }
 
     private void SpawnVisitors()
     {
-        for (int i = 0; i < slots.Count; i++)
+        for (int i = 0; ((i < slots.Count) && (i < levelSettings.GetVisitorsSettings.visitorsCount)); i++)
         {
             visitors.Add(SpawnVisitor());
         }
@@ -45,29 +51,24 @@ public class VisitorsSpawner : MonoBehaviour
             {
                 StartCoroutine(visitor.MoveToPosition(slots[indexInSlots].position));
                 yield return new WaitForSeconds(movingToPositionDelay);
-            }
+            }   
         }
         movingToPositionDelay = 0;
     }
 
-    private void DeleteVisitorFromQueue(Visitor visitor)
+    public void DeleteVisitorFromQueue(Visitor visitor)
     {
         StopCoroutine(nameof(MoveVisitorsToPositions));
-        if (maxVisitorsNumber == spawnedVisitors)
+        if (levelSettings.GetVisitorsSettings.visitorsCount == spawnedVisitors)
         {
             visitors.Remove(visitor);
-        } else
+        }
+        else
         {
             visitors.Remove(visitor);
             visitors.Add(SpawnVisitor());
         }
-        servicedVisitors++;
         StartCoroutine(MoveVisitorsToPositions());
-    }
-
-    private void OnDestroy()
-    {
-        Visitor.onExit -= DeleteVisitorFromQueue;
     }
 
     private Visitor SpawnVisitor()
@@ -76,14 +77,29 @@ public class VisitorsSpawner : MonoBehaviour
         visitor.transform.SetAsFirstSibling();
 
         RandomNumberGenerator.PartitionsParameters partitionsParameters = new RandomNumberGenerator.PartitionsParameters();
-        partitionsParameters.InitPartitions(spawnedVisitors, maxVisitorsNumber);
-        partitionsParameters.InitValues(currentDishesCount, maxDishesNumber);
-        partitionsParameters.InitPartitionsValuesLimits(minDishesPerVisitor, maxDishesPerVisitor);
+        partitionsParameters.InitPartitions(spawnedVisitors, levelSettings.GetVisitorsSettings.visitorsCount);
+        partitionsParameters.InitValues(currentDishesCount, levelSettings.GetLevelDishesCount);
+        partitionsParameters.InitPartitionsValuesLimits(
+            levelSettings.GetVisitorsSettings.minVisitorDishesCount,
+            levelSettings.GetVisitorsSettings.maxVisitorDishesCount
+        );
 
         int randCount = RandomNumberGenerator.GenerateForPartitions(partitionsParameters);
         currentDishesCount += randCount;
         spawnedVisitors++;
         visitor.Init(randCount);
         return visitor;
+    }
+
+    private void ClearQueue()
+    {
+        if (visitors != null)
+        {
+            foreach (Visitor visitor in visitors)
+            {
+                Destroy(visitor.gameObject);
+            }
+        }
+        visitors = new List<Visitor>();
     }
 }

@@ -17,7 +17,8 @@ public class Visitor : MonoBehaviour
 
     private Vector3 exitPosition = new Vector2(2078.5f, 540.0f);
 
-    public static Action<Visitor> onExit;
+    public static Action<Visitor> OnExit;
+    public static Action<Visitor> OnVisitorServed;
 
     public void Init(int dishesCount)
     {
@@ -56,7 +57,8 @@ public class Visitor : MonoBehaviour
         Destroy(dishObject);
         if (visitorDishes.Count == 0)
         {
-            onExit?.Invoke(this);
+            OnExit?.Invoke(this);
+            OnVisitorServed?.Invoke(this);
             StartCoroutine(MoveToPosition(exitPosition, true));
         }
     }
