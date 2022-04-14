@@ -51,6 +51,5 @@ public class LevelSettings
         visitorsSettings = new VisitorsSettings(settings.visitorsCount, 1, 1, settings.maxDishesInOrder);
         levelDishesCount = settings.dishesCount;
         levelTime = settings.time;
-        Debug.Log(visitorsSettings.visitorsCount);
     }
 }
