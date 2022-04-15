@@ -578,7 +578,7 @@ GameObject:
   - component: {fileID: 84255180}
   - component: {fileID: 84255181}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: Booster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2090,6 +2090,7 @@ MonoBehaviour:
   visitorsCountPreviewer: {fileID: 1081659509}
   winPanel: {fileID: 5898851}
   losePanel: {fileID: 564806476}
+  booster: {fileID: 1768311826}
 --- !u!4 &1162366489
 Transform:
   m_ObjectHideFlags: 0
@@ -2828,6 +2829,7 @@ GameObject:
   - component: {fileID: 1768311825}
   - component: {fileID: 1768311824}
   - component: {fileID: 1768311823}
+  - component: {fileID: 1768311826}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -2872,7 +2874,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 2
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -2883,7 +2885,7 @@ MonoBehaviour:
     m_FadeDuration: 0.1
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 21300000, guid: a8a9a80f0cbd1344ca3ff86cd553c2b5, type: 3}
     m_SelectedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
@@ -2934,6 +2936,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1768311821}
   m_CullTransparentMesh: 0
+--- !u!114 &1768311826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1768311821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be60219742ac56348b1d1935e54dd5b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boosterCountTextMesh: {fileID: 683893067}
 --- !u!1 &1823663311
 GameObject:
   m_ObjectHideFlags: 0
