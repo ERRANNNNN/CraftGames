@@ -24,12 +24,14 @@ public class VisitorsSpawner : MonoBehaviour
         levelSettings = _levelSettings;
         visitorsDishAccepter = new VisitorsDishAccepter(visitors);
         Visitor.OnExit += DeleteVisitorFromQueue;
+        Booster.OnBoosterUsed += ServedFirstVisitor;
         SpawnVisitors();
     }
 
     private void OnDestroy()
     {
         Visitor.OnExit -= DeleteVisitorFromQueue;
+        Booster.OnBoosterUsed -= ServedFirstVisitor;
     }
 
     private void SpawnVisitors()
@@ -100,5 +102,10 @@ public class VisitorsSpawner : MonoBehaviour
             }
         }
         visitors = new List<Visitor>();
+    }
+
+    private void ServedFirstVisitor()
+    {
+        visitors[0].MakeServed();
     }
 }
