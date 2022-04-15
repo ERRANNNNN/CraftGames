@@ -57,9 +57,14 @@ public class Visitor : MonoBehaviour
         Destroy(dishObject);
         if (visitorDishes.Count == 0)
         {
-            OnExit?.Invoke(this);
-            OnVisitorServed?.Invoke(this);
-            StartCoroutine(MoveToPosition(exitPosition, true));
+            MakeServed();
         }
+    }
+
+    public void MakeServed()
+    {
+        OnExit?.Invoke(this);
+        OnVisitorServed?.Invoke(this);
+        StartCoroutine(MoveToPosition(exitPosition, true));
     }
 }
