@@ -37,6 +37,10 @@ public class LevelSettings
     private int levelTime;
     public int LevelTime => levelTime;
 
+    private int boosterCount;
+
+    public int BoosterCount => boosterCount;
+
     public LevelSettings()
     {
         IJsonDataLoader loader = new LevelSettingsLoaderFromAssets();
@@ -51,5 +55,6 @@ public class LevelSettings
         visitorsSettings = new VisitorsSettings(settings.visitorsCount, 1, 1, settings.maxDishesInOrder);
         levelDishesCount = settings.dishesCount;
         levelTime = settings.time;
+        boosterCount = settings.boosterCount;
     }
 }
