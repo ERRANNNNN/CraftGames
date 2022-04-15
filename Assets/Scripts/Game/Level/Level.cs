@@ -9,6 +9,7 @@ public class Level : MonoBehaviour
     [SerializeField] private VisitorsCountPreviewer visitorsCountPreviewer;
     [SerializeField] private GameObject winPanel;
     [SerializeField] private GameObject losePanel;
+    [SerializeField] private Booster booster;
     private LevelSettings levelSettings;
     public static Action OnEndLevel;
 
@@ -33,6 +34,7 @@ public class Level : MonoBehaviour
         visitorsSpawner.Init(levelSettings);
         visitorsCountPreviewer.Init(levelSettings.GetVisitorsSettings.visitorsCount);
         timer.Init(levelSettings.LevelTime);
+        booster.Init(levelSettings.BoosterCount);
     }
 
     private void UpdateServicedVisitors(Visitor visitor)
@@ -63,6 +65,7 @@ public class Level : MonoBehaviour
         losePanel.SetActive(false);
         Visitor.OnExit = null;
         Visitor.OnVisitorServed = null;
+        Booster.OnBoosterUsed = null;
         Init();
     }
 }
